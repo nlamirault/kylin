@@ -120,8 +120,9 @@ def serial_is_available(name):
 
     ports = list_ports.comports()
     for port in ports:
+        print("Port: %s %s" % (port.device, name))
         logger.info("Port: %s" % port)
-        if port.name == name:
+        if port.device == name:
             return True
     return False
 

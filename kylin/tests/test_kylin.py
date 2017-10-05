@@ -23,3 +23,6 @@ class KylinTestCase(unittest.TestCase):
     def test_invalid_serial_port(self):
         with self.assertRaises(exceptions.KylinNotFoundError):
             kylin.Kylin("/dev/ttyFoo00")
+
+    def test_valid_usb_port(self):
+        self.assertTrue(kylin.Kylin("/dev/ttyACM0"))
