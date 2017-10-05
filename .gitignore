@@ -1,5 +1,8 @@
-.eggs/
+*.pyc
 .tox/
-dist/
-kylin.egg-info/
 venv/
+
+dist/
+
+.eggs/
+kylin.egg-info/
