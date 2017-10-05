@@ -12,23 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import unittest
 
-class KylinError(Exception):
-    """Base exception for errors raised by Kylin"""
-    pass
-
-
-class KylinSerialError(KylinError):
-    """Base class for serial port exceptions. """
-
-    def __init__(self, msg, error):
-        super(KylinSerialError, self).__init__(msg + (": %s" % error))
-        self.error = error
+import kylin
+from kylin import exceptions
 
 
-class KylinNotFoundError(KylinError):
-    """Base class when no serial port exists. """
+class KylinTestCase(unittest.TestCase):
 
-    def __init__(self, name):
-        super(KylinNotFoundError, self).__init__(
-            "Serial port not available: %s", name)
+    def test_invalid_serial_port(self):
+        with self.assertRaises(exceptions.KylinNotFoundError):
+            kylin.Kylin("/dev/ttyFoo00")

@@ -5,5 +5,8 @@ venv/
 dist/
 build/
 
+.cache/
+.coverage
+
 .eggs/
 kylin.egg-info/

@@ -14,6 +14,7 @@
 
 import logging
 import serial
+from serial.tools import list_ports
 
 import daiquiri
 
@@ -36,6 +37,8 @@ class Kylin(object):
 
     def __init__(self, port=DEFAULT_SERIAL_PORT, timeout=DEFAULT_TIMEOUT,
                  verbose=False):
+        if not serial_is_available(port):
+            raise exceptions.KylinNotFoundError(port)
         self._port = port
         self._timeout = timeout
         self._teleinfo = None
@@ -110,6 +113,17 @@ class Kylin(object):
                     line = self._port.readline()
 
         return frame
+
+
+def serial_is_available(name):
+    """ Check if a serial port is available. """
+
+    ports = list_ports.comports()
+    for port in ports:
+        logger.info("Port: %s" % port)
+        if port.name == name:
+            return True
+    return False
 
 
 def frame_is_valid(frame, checksum):
