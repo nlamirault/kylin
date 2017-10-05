@@ -1,5 +1,5 @@
-Python Freebox Client
-=====================
+Kylin -- EDF Teleinformation Python library
+=================================================
 
 .. image:: https://badge.fury.io/py/kylin.png
     :target: http://badge.fury.io/py/kylin
