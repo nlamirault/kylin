@@ -4,9 +4,6 @@ Kylin -- EDF Teleinformation Python library
 .. image:: https://badge.fury.io/py/kylin.png
     :target: http://badge.fury.io/py/kylin
 
-.. image:: https://pypip.in/d/kylin/badge.png
-    :target: https://crate.io/packages/kylin
-
 .. image:: https://coveralls.io/repos/nlamirault/kylin/badge.png?branch=master
     :target: https://coveralls.io/r/nlamirault/kylin?branch=master
 
