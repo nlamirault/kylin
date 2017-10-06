@@ -2,45 +2,48 @@ stages:
   - test
   - coverage
 
-test_template: &test_job
-  image: python:3.6
-  tags:
-    - docker
-  script:
-    - pip3 install -r requirements.txt
-    - pip3 install -r requirements-dev.txt
-  artifacts:
-    paths:
-      - .coverage.*
+.job_template: &dependencies_job |
+  pip3 install -r requirements.txt
+  pip3 install -r requirements-dev.txt
 
 python 2.7:
-  <<: *test_job
   image: python:2.7
-  script: tox -epy27
+  script:
+    - *dependencies
+    - tox -epy27
+
 python 3.3:
-  <<: *test_job
   image: python:3.3
-  script: tox -epy33
+  script:
+    - *dependencies
+    - tox -epy33
+
 python 3.4:
-  <<: *test_job
   image: python:3.4
-  script: tox -epy34
+  script: 
+    - *dependencies
+    - tox -epy34
+
 python 3.5:
-  <<: *test_job
-  script: tox -epy35
+  script:
+    - *dependencies
+    - tox -epy35
+
 python 3.6:
-  <<: *test_job
-  script: tox -epy36
+  script:
+    - *dependencies
+    - tox -epy36
+
 flake8:
-  <<: *test_job
   image: python:3.5
   script:
+    - *dependencies
     - tox -epep8
 
 coverage:
-  <<: *test_job
   stage: coverage
   script:
+    - *dependencies
     - tox -ecoverage
   artifacts:
     paths:
@@ -48,8 +51,8 @@ coverage:
   when: always
 
 pip:test:
-  <<: *test_job
   stage: deploy
   script:
+    - *dependencies
     - make pkg-install
     - make pkg-dist
