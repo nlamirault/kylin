@@ -6,8 +6,9 @@ test_template: &test_job
   image: python:3.6
   tags:
     - docker
-  before_script:
-    - pip install tox
+  script:
+    - pip3 install -r requirements.txt
+    - pip3 install -r requirements-dev.txt
   artifacts:
     paths:
       - .coverage.*
