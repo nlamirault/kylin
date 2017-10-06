@@ -47,4 +47,9 @@ coverage:
       - htmlcov/
   when: always
 
-
+pip:test:
+  <<: *test_job
+  stage: deploy
+  script:
+    - make pkg-install
+    - make pkg-dist
