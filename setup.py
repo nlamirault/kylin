@@ -14,12 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import codecs
 import setuptools
 
 from kylin import version
 
+
+with codecs.open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
+
 setuptools.setup(
     version=version.release,
     setup_requires=['pbr'],
+    install_requires=requirements,
     pbr=True,
 )
