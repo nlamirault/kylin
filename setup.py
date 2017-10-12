@@ -14,19 +14,53 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import codecs
-import setuptools
-
-from kylin import version
+from setuptools import setup
+import os
 
 
-with codecs.open('requirements.txt') as f:
-    requirements = f.read().splitlines()
+def read(fname):
+    with open(os.path.join(os.path.dirname(__file__), fname)) as fn:
+        return fn.read()
+
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
+with open('requirements-test.txt') as f:
+    required_for_tests = f.read().splitlines()
 
 
-setuptools.setup(
-    version=version.release,
-    setup_requires=['pbr'],
-    install_requires=requirements,
-    pbr=True,
+setup(
+   name='kylin',
+   version='0.3.0',
+   description='Library to read Teleinfo frames',
+   long_description=read('README.rst'),
+   url='https://github.com/nlamirault/kylin',
+   author='Nicolas Lamirault',
+   author_email='nicolas.lamirault@gmail.com',
+   packages=['kylin'],
+   install_requires=required,
+   license='License :: OSI Approved :: Apache Software License',
+   classifiers=[
+      'Development Status :: 5 - Production/Stable',
+      'License :: OSI Approved :: Apache Software License',
+      'Intended Audience :: Information Technology',
+      'Intended Audience :: System Administrators',
+      'Intended Audience :: Developers',
+      'Environment :: No Input/Output (Daemon)',
+      'Programming Language :: Python :: 2',
+      'Programming Language :: Python :: 2.7',
+      'Programming Language :: Python :: 3',
+      'Programming Language :: Python :: 3.3',
+      'Programming Language :: Python :: 3.4',
+      'Programming Language :: Python :: 3.5',
+      'Programming Language :: Python :: 3.6',
+      'Topic :: Software Development :: Libraries :: Python Modules',
+      'Topic :: System :: Distributed Computing',
+      'Operating System :: Unix',
+   ],
+   keywords='teleinfo',
+   platforms=['Linux'],
+   test_suite='kylin/tests',
+   tests_require=required_for_tests,
+   zip_safe=True
 )

@@ -71,3 +71,10 @@ pip:test:
     - *dependencies_py3
     - make init pkg-install
     - make init pkg-dist
+
+pip:install:
+  stage: deploy
+  image: python:3.6
+  script:
+    - virtualenv --python=/usr/bin/python3 venv
+    - . venv/bin/activate && pip install --index-url https://test.pypi.org/simple/ kylin
