@@ -1,6 +1,7 @@
 stages:
   - test
   - coverage
+  - deploy
 
 .job_template: &dependencies |
   pip3 install -r requirements.txt
@@ -8,34 +9,42 @@ stages:
 
 python 2.7:
   image: python:2.7
+  stage: test
   script:
     - *dependencies
     - tox -epy27
 
 python 3.3:
   image: python:3.3
+  stage: test
   script:
     - *dependencies
     - tox -epy33
 
 python 3.4:
   image: python:3.4
+  stage: test
   script: 
     - *dependencies
     - tox -epy34
 
 python 3.5:
+  image: python:3.5
+  stage: test
   script:
     - *dependencies
     - tox -epy35
 
 python 3.6:
+  image: python:3.6
+  stage: test
   script:
     - *dependencies
     - tox -epy36
 
 flake8:
   image: python:3.5
+  stage: test
   script:
     - *dependencies
     - tox -epep8
