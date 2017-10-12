@@ -14,7 +14,7 @@
 
 import kylin
 
-teleinfo = kylin.Kylin(timeout=2, verbose=True)
+teleinfo = kylin.Kylin(port="/dev/ttyUSB0", timeout=2, verbose=True)
 teleinfo.open()
 teleinfo.readframe()
 teleinfo.close()

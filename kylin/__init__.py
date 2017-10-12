@@ -55,8 +55,11 @@ class Kylin(object):
             self._teleinfo = serial.Serial(
                 port=self._port,
                 baudrate=1200,
+                bytesize=serial.SEVENBITS,
+                parity=serial.PARITY_EVEN,
+                stopbits=serial.STOPBITS_ONE,
+                rtscts=1,
                 timeout=self._timeout)
-            # self._readframe()
 
         except serial.SerialException as err:
             raise exceptions.KylinSerialError(
@@ -65,8 +68,8 @@ class Kylin(object):
     def close(self):
         """ Close the serial connection. """
         try:
-            if self._port.isOpen():
-                self._port.close()
+            if self._teleinfo.isOpen():
+                self._teleinfo.close()
         except serial.SerialException as err:
             raise exceptions.KylinSerialError(
                 "Unable to close serial connection", err)
@@ -74,44 +77,47 @@ class Kylin(object):
     def readframe(self):
         """Read a frame from serial port. """
         is_over = False
-        line = self._port.readline()
+        data = self._teleinfo.readline()
+        line = data.decode('ascii')
+        logger.info("Line: %s", line)
         frame = []
         while not is_over:
 
             # We're waiting for a new frame
             while FRAME_START not in line:
-                line = self._port.readline()
+                data = self._teleinfo.readline()
+                line = data.decode('ascii')
+                logger.debug("Waiting ....")
 
-                logger.debug(u"New frame")
-                line = self._port.readline()
+            logger.info(u"New frame")
+            data = self._teleinfo.readline()
+            line = data.decode('ascii')
+            logger.info("Line: %s" % line)
+            while FRAME_END not in line:
+                # Don't use strip() here because the checksum can be ' '
+                if len(line.replace('\r', '').replace('\n', '').split()) == 2:
+                    # The checksum char is ' '
+                    name, value = line.replace('\r', '').replace('\n', '').split()
+                    checksum = ' '
+                else:
+                    name, value, checksum = line.replace('\r', '').replace('\n', '').split()
 
-                while FRAME_END not in line:
-                    # Don't use strip() here because the checksum can be ' '
-                    if len(line.replace('\r', '').replace(
-                            '\n', '').split()) == 2:
-                        # The checksum char is ' '
-                        name, value = line.replace(
-                            '\r', '').replace('\n', '').split()
-                        checksum = ' '
-                    else:
-                        name, value, checksum = line.replace(
-                            '\r', '').replace('\n', '').split()
+                if frame_is_valid(line, checksum):
+                   frame.append({
+                       "name": name,
+                       "value": value,
+                       "checksum": checksum,
+                   })
+                   is_over = True
+                else:
+                   logger.warning("Frame corrupted. Waiting for a new one.")
+                   break
 
-                    if frame_is_valid(line, checksum):
-                        frame.append({
-                            "name": name,
-                            "value": value,
-                            "checksum": checksum,
-                        })
-                        is_over = True
+                data = self._teleinfo.readline()
+                line = data.decode('ascii')
+                logger.info("Line: %s", line)
 
-                    else:
-                        logger.warning(
-                            "Frame corrupted. Waiting for a new one.")
-                        break
-
-                    line = self._port.readline()
-
+        logger.info("Frame: %s" % frame)
         return frame
 
 
