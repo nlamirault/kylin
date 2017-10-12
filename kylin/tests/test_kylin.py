@@ -18,7 +18,7 @@ import kylin
 from kylin import exceptions
 
 
-valid_frame = "ADCO 524563565245 /
+valid_frame = """ADCO 524563565245 /
 OPTARIF HC.. <
 ISOUSC 20 8
 HCHC 001065963 _
@@ -34,7 +34,8 @@ PPOT 00 #
 ADCO 524563565245 /
 OPTARIF HC.. <
 ISOUSC 20 8
-"
+"""
+
 
 class KylinTestCase(unittest.TestCase):
 
