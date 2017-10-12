@@ -74,33 +74,43 @@ class Kylin(object):
             raise exceptions.KylinSerialError(
                 "Unable to close serial connection", err)
 
+    def _readline(self):
+        data = self._teleinfo.readline()
+        line = data.decode('ascii')
+        return line.replace('\r', '').replace('\n', '') 
+
     def readframe(self):
         """Read a frame from serial port. """
         is_over = False
-        data = self._teleinfo.readline()
-        line = data.decode('ascii')
+        # data = self._teleinfo.readline()
+        # line = data.decode('ascii')
+        line = self._readline()
         logger.info("Line: %s", line)
         frame = []
         while not is_over:
 
             # We're waiting for a new frame
             while FRAME_START not in line:
-                data = self._teleinfo.readline()
-                line = data.decode('ascii')
+                # data = self._teleinfo.readline()
+                # line = data.decode('ascii')
+                line = self._readline()
                 logger.debug("Waiting ....")
 
             logger.info(u"New frame")
-            data = self._teleinfo.readline()
-            line = data.decode('ascii')
+            # data = self._teleinfo.readline()
+            # line = data.decode('ascii')
+            line = self._readline()
             logger.info("Line: %s" % line)
             while FRAME_END not in line:
                 # Don't use strip() here because the checksum can be ' '
-                if len(line.replace('\r', '').replace('\n', '').split()) == 2:
+                # if len(line.replace('\r', '').replace('\n', '').split()) == 2:
+                if len(line.split()) == 2:
                     # The checksum char is ' '
                     name, value = line.replace('\r', '').replace('\n', '').split()
                     checksum = ' '
                 else:
-                    name, value, checksum = line.replace('\r', '').replace('\n', '').split()
+                    # name, value, checksum = line.replace('\r', '').replace('\n', '').split()
+                    name, value, checksum = line.split()
 
                 if frame_is_valid(line, checksum):
                    frame.append({
@@ -113,8 +123,9 @@ class Kylin(object):
                    logger.warning("Frame corrupted. Waiting for a new one.")
                    break
 
-                data = self._teleinfo.readline()
-                line = data.decode('ascii')
+                # data = self._teleinfo.readline()
+                # line = data.decode('ascii')
+                line = self._readline()
                 logger.info("Line: %s", line)
 
         logger.info("Frame: %s" % frame)
@@ -126,7 +137,6 @@ def serial_is_available(name):
 
     ports = list_ports.comports()
     for port in ports:
-        print("Port: %s %s" % (port.device, name))
         logger.info("Port: %s" % port)
         if port.device == name:
             return True
