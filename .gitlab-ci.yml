@@ -3,7 +3,11 @@ stages:
   - coverage
   - deploy
 
-.job_template: &dependencies |
+.job_template: &dependencies_py2 |
+  pip install -r requirements.txt
+  pip install -r requirements-dev.txt
+
+.job_template: &dependencies_py3 |
   pip3 install -r requirements.txt
   pip3 install -r requirements-dev.txt
 
@@ -11,48 +15,49 @@ python 2.7:
   image: python:2.7
   stage: test
   script:
-    - *dependencies
+    - *dependencies_py2
     - tox -epy27
 
 python 3.3:
   image: python:3.3
   stage: test
   script:
-    - *dependencies
+    - *dependencies_py3
     - tox -epy33
 
 python 3.4:
   image: python:3.4
   stage: test
-  script: 
-    - *dependencies
+  script:
+    - *dependencies_py3
     - tox -epy34
 
 python 3.5:
   image: python:3.5
   stage: test
   script:
-    - *dependencies
+    - *dependencies_py3
     - tox -epy35
 
 python 3.6:
   image: python:3.6
   stage: test
   script:
-    - *dependencies
+    - *dependencies_py3
     - tox -epy36
 
 flake8:
   image: python:3.5
   stage: test
   script:
-    - *dependencies
+    - *dependencies_py3
     - tox -epep8
 
 coverage:
+  image: python:3.6
   stage: coverage
   script:
-    - *dependencies
+    - *dependencies_py3
     - tox -ecoverage
   artifacts:
     paths:
@@ -61,7 +66,8 @@ coverage:
 
 pip:test:
   stage: deploy
+  image: python:3.6
   script:
-    - *dependencies
-    - make pkg-install
-    - make pkg-dist
+    - *dependencies_py3
+    - make init pkg-install
+    - make init pkg-dist

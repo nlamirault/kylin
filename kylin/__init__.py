@@ -77,13 +77,11 @@ class Kylin(object):
     def _readline(self):
         data = self._teleinfo.readline()
         line = data.decode('ascii')
-        return line.replace('\r', '').replace('\n', '') 
+        return line.replace('\r', '').replace('\n', '')
 
     def readframe(self):
         """Read a frame from serial port. """
         is_over = False
-        # data = self._teleinfo.readline()
-        # line = data.decode('ascii')
         line = self._readline()
         logger.info("Line: %s", line)
         frame = []
@@ -91,40 +89,33 @@ class Kylin(object):
 
             # We're waiting for a new frame
             while FRAME_START not in line:
-                # data = self._teleinfo.readline()
-                # line = data.decode('ascii')
                 line = self._readline()
                 logger.debug("Waiting ....")
 
             logger.info(u"New frame")
-            # data = self._teleinfo.readline()
-            # line = data.decode('ascii')
             line = self._readline()
             logger.info("Line: %s" % line)
             while FRAME_END not in line:
                 # Don't use strip() here because the checksum can be ' '
-                # if len(line.replace('\r', '').replace('\n', '').split()) == 2:
                 if len(line.split()) == 2:
                     # The checksum char is ' '
-                    name, value = line.replace('\r', '').replace('\n', '').split()
+                    name, value = line.replace('\r', '').replace(
+                        '\n', '').split()
                     checksum = ' '
                 else:
-                    # name, value, checksum = line.replace('\r', '').replace('\n', '').split()
                     name, value, checksum = line.split()
 
                 if frame_is_valid(line, checksum):
-                   frame.append({
-                       "name": name,
-                       "value": value,
-                       "checksum": checksum,
-                   })
-                   is_over = True
+                    frame.append({
+                        "name": name,
+                        "value": value,
+                        "checksum": checksum,
+                    })
+                    is_over = True
                 else:
-                   logger.warning("Frame corrupted. Waiting for a new one.")
-                   break
+                    logger.warning("Frame corrupted. Waiting for a new one.")
+                    break
 
-                # data = self._teleinfo.readline()
-                # line = data.decode('ascii')
                 line = self._readline()
                 logger.info("Line: %s", line)
 

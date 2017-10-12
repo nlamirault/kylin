@@ -13,12 +13,13 @@
 # limitations under the License.
 
 import unittest
+# from unittest import mock
 
 import kylin
 from kylin import exceptions
 
 
-valid_frame = "ADCO 524563565245 /
+valid_frame = """ADCO 524563565245 /
 OPTARIF HC.. <
 ISOUSC 20 8
 HCHC 001065963 _
@@ -34,7 +35,8 @@ PPOT 00 #
 ADCO 524563565245 /
 OPTARIF HC.. <
 ISOUSC 20 8
-"
+"""
+
 
 class KylinTestCase(unittest.TestCase):
 
@@ -46,4 +48,4 @@ class KylinTestCase(unittest.TestCase):
         self.assertTrue(kylin.Kylin("/dev/ttyS0"))
 
     def test_extract_teleinfo(self):
-        pass
+        pass  # Try to mock serial here
