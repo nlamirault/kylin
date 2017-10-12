@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import unittest
+# from unittest import mock
 
 import kylin
 from kylin import exceptions
@@ -47,4 +48,4 @@ class KylinTestCase(unittest.TestCase):
         self.assertTrue(kylin.Kylin("/dev/ttyS0"))
 
     def test_extract_teleinfo(self):
-        pass
+        pass # Try to mock serial here
