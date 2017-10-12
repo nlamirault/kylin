@@ -48,4 +48,4 @@ class KylinTestCase(unittest.TestCase):
         self.assertTrue(kylin.Kylin("/dev/ttyS0"))
 
     def test_extract_teleinfo(self):
-        pass # Try to mock serial here
+        pass  # Try to mock serial here
