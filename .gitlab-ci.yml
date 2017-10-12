@@ -47,14 +47,14 @@ python 3.6:
     - tox -epy36
 
 flake8:
-  image: python:3.5_py3
+  image: python:3.5
   stage: test
   script:
-    - *dependencies
+    - *dependencies_py3
     - tox -epep8
 
 coverage:
-  image: python:3.6_py3
+  image: python:3.6
   stage: coverage
   script:
     - *dependencies_py3
@@ -66,8 +66,8 @@ coverage:
 
 pip:test:
   stage: deploy
-  image: python:3.6_py3
+  image: python:3.6
   script:
-    - *dependencies
+    - *dependencies_py3
     - make pkg-install
     - make pkg-dist
