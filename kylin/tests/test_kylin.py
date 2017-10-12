@@ -18,6 +18,24 @@ import kylin
 from kylin import exceptions
 
 
+valid_frame = "ADCO 524563565245 /
+OPTARIF HC.. <
+ISOUSC 20 8
+HCHC 001065963 _
+HCHP 001521211 '
+PTEC HC.. S
+IINST 001 I
+IMAX 008 2
+PMAX 06030 3
+PAPP 01250 +
+HHPHC E 0
+MOTDETAT 000000 B
+PPOT 00 #
+ADCO 524563565245 /
+OPTARIF HC.. <
+ISOUSC 20 8
+"
+
 class KylinTestCase(unittest.TestCase):
 
     def test_invalid_serial_port(self):
@@ -25,4 +43,7 @@ class KylinTestCase(unittest.TestCase):
             kylin.Kylin("/dev/ttyFoo00")
 
     def test_valid_usb_port(self):
-        self.assertTrue(kylin.Kylin("/dev/ttyACM0"))
+        self.assertTrue(kylin.Kylin("/dev/ttyS0"))
+
+    def test_extract_teleinfo(self):
+        pass
