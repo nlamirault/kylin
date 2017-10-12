@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-release = "0.2.1"
+release = "0.3.0"
