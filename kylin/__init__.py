@@ -67,6 +67,8 @@ class Kylin(object):
 
     def close(self):
         """ Close the serial connection. """
+        if self._teleinfo is None:
+            return
         try:
             if self._teleinfo.isOpen():
                 self._teleinfo.close()
