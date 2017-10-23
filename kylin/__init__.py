@@ -43,6 +43,7 @@ class Kylin(object):
         level = logging.INFO
         if verbose:
             level = logging.DEBUG
+        logger.setLevel(level)
 
     def open(self):
         try:
