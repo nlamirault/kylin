@@ -17,7 +17,6 @@ import serial
 from serial.tools import list_ports
 
 from kylin import exceptions
-from kylin import log
 
 
 FRAME_START = '\x02'
@@ -44,7 +43,6 @@ class Kylin(object):
         level = logging.INFO
         if verbose:
             level = logging.DEBUG
-        log.setup_logging(level)
 
     def open(self):
         try:
