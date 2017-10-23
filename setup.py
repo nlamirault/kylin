@@ -17,6 +17,8 @@
 from setuptools import setup
 import os
 
+from kylin import version
+
 
 def read(fname):
     with open(os.path.join(os.path.dirname(__file__), fname)) as fn:
@@ -31,7 +33,7 @@ with open('requirements-test.txt') as f:
 
 setup(
    name='kylin',
-   version='0.3.0',
+   version=version.release,
    description='Library to read Teleinfo frames',
    long_description=read('README.rst'),
    url='https://github.com/nlamirault/kylin',
