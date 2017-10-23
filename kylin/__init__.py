@@ -16,8 +16,6 @@ import logging
 import serial
 from serial.tools import list_ports
 
-import daiquiri
-
 from kylin import exceptions
 from kylin import log
 
@@ -29,7 +27,7 @@ DEFAULT_SERIAL_PORT = '/dev/ttyS0'
 
 DEFAULT_TIMEOUT = 1
 
-logger = daiquiri.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Kylin(object):
