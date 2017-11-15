@@ -13,49 +13,49 @@ stages:
   pip3 install -r requirements.txt
   pip3 install -r requirements-dev.txt
 
-python 2.7:
+test:python2.7:
   image: python:2.7
   stage: test
   script:
     - *dependencies_py2
     - tox -epy27
 
-python 3.3:
+test:python3.3:
   image: python:3.3
   stage: test
   script:
     - *dependencies_py3
     - tox -epy33
 
-python 3.4:
+test:python3.4:
   image: python:3.4
   stage: test
   script:
     - *dependencies_py3
     - tox -epy34
 
-python 3.5:
+test:python3.5:
   image: python:3.5
   stage: test
   script:
     - *dependencies_py3
     - tox -epy35
 
-python 3.6:
+test:python3.6:
   image: python:3.6
   stage: test
   script:
     - *dependencies_py3
     - tox -epy36
 
-flake8:
+test:flake8:
   image: python:3.5
   stage: test
   script:
     - *dependencies_py3
     - tox -epep8
 
-coverage:
+coverage:python:
   image: python:3.6
   stage: coverage
   script:
@@ -66,20 +66,25 @@ coverage:
       - htmlcov/
   when: always
 
-pip:test:
+deploy:pypi-test:
   stage: deploy
   image: python:3.6
   script:
-    - *dependencies_py3
     - pip install virtualenv
     - virtualenv venv
     - make init pkg-install pkg-dist
-    - make init
+    - twine upload --config-file .pypirc -r test -u $PYPI_USER -p $PYPI_PASSWORD dist/*
 
-# pip:install:
-#   stage: deploy
-#   image: python:3.6
-#   script:
-#     - pip install virtualenv
-#     - virtualenv venv
-#     - make init pkg-install pkg-dist pkg-publish-test
+deploy:pypi:
+  stage: deploy
+  image: python:3.6
+  script:
+    - pip install virtualenv
+    - virtualenv venv
+    - make init pkg-install pkg-dist
+    - twine upload --config-file .pypirc -u $PYPI_USER -p $PYPI_PASSWORD dist/*
+  environment:
+    name: PyPI
+    url: https://pypi.python.org/pypi/kylin
+  only:
+    - tags
