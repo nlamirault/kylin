@@ -76,10 +76,10 @@ pip:test:
     - make init pkg-install pkg-dist
     - make init
 
-pip:install:
-  stage: deploy
-  image: python:3.6
-  script:
-    - pip install virtualenv
-    - virtualenv venv
-    - make init pkg-install pkg-dist pkg-publish-test
+# pip:install:
+#   stage: deploy
+#   image: python:3.6
+#   script:
+#     - pip install virtualenv
+#     - virtualenv venv
+#     - make init pkg-install pkg-dist pkg-publish-test
