@@ -72,7 +72,7 @@ pip:test:
   script:
     - *dependencies_py3
     - pip install virtualenv
-    - virtualenv --python=/usr/bin/python3.6 venv
+    - virtualenv venv
     - make init pkg-install
     - make init pkg-dist
 
@@ -81,5 +81,5 @@ pip:install:
   image: python:3.6
   script:
     - pip install virtualenv
-    - virtualenv --python=/usr/bin/python3.6 venv
-    - . venv/bin/activate && pip install --index-url https://test.pypi.org/simple/ kylin
+    - virtualenv venv
+    - source venv/bin/activate && pip install --index-url https://test.pypi.org/simple/ kylin
