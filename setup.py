@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from setuptools import setup
-import os
+# import os
 
 from kylin import version
 
@@ -25,12 +25,12 @@ def read(fname):
         return fn.read()
 
 
-with open('requirements.txt') as f:
-    required = f.read().splitlines()
+# with open('requirements.txt') as f:
+#     required = f.read().splitlines()
 
 
-with open('requirements-test.txt') as f:
-    required_for_tests = f.read().splitlines()
+# with open('requirements-test.txt') as f:
+#     required_for_tests = f.read().splitlines()
 
 
 setup(
@@ -42,7 +42,9 @@ setup(
     author='Nicolas Lamirault',
     author_email='nicolas.lamirault@gmail.com',
     packages=['kylin'],
-    install_requires=required,
+    install_requires=[
+        "pyserial==3.4"
+    ],
     license='License :: OSI Approved :: Apache Software License',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -65,6 +67,11 @@ setup(
     keywords='teleinfo',
     platforms=['Linux'],
     test_suite='kylin/tests',
-    tests_require=required_for_tests,
+    tests_require=[
+        "pytest==3.2.3",
+        "pytest-cov==2.5.1",
+        "pytest-sugar==0.9.0",
+        "flake8==3.4.1",
+    ],
     zip_safe=True
 )
