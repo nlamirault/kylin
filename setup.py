@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from setuptools import setup
-# import os
+import os
 
 from kylin import version
 
