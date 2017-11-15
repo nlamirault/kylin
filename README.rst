@@ -10,6 +10,11 @@ Kylin -- EDF Teleinformation Python library
 .. image:: https://gemnasium.com/nlamirault/kylin.png
     :target: https://gemnasium.com/nlamirault/kylin
 
+.. image:: https://gitlab.com/nicolas-lamirault/kylin/badges/master/pipeline.svg
+    :target: https://gitlab.com/nicolas-lamirault/kylin/commits/master
+
+.. image:: https://gitlab.com/nicolas-lamirault/kylin/badges/develop/pipeline.svg
+    :target: https://gitlab.com/nicolas-lamirault/kylin/develop/master
 
 This library is to read Teleinfo_ frames
 
