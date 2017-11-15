@@ -82,7 +82,7 @@ deploy:pypi:
     - pip install virtualenv
     - virtualenv venv
     - make init pkg-install pkg-dist
-    - twine upload --config-file .pypirc -u $PYPI_USER -p $PYPI_PASSWORD dist/*
+    - source venv/bin/activate && twine upload --config-file .pypirc -u $PYPI_USER -p $PYPI_PASSWORD dist/*
   environment:
     name: PyPI
     url: https://pypi.python.org/pypi/kylin
