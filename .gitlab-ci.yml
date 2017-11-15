@@ -73,8 +73,8 @@ pip:test:
     - *dependencies_py3
     - pip install virtualenv
     - virtualenv venv
-    - make init pkg-install
-    - make init pkg-dist
+    - make init pkg-install pkg-dist
+    - make init
 
 pip:install:
   stage: deploy
@@ -82,4 +82,4 @@ pip:install:
   script:
     - pip install virtualenv
     - virtualenv venv
-    - source venv/bin/activate && pip install --index-url https://test.pypi.org/simple/ kylin
+    - make init pkg-install pkg-dist pkg-publish-test
