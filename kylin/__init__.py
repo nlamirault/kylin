@@ -16,10 +16,7 @@ import logging
 import serial
 from serial.tools import list_ports
 
-import daiquiri
-
 from kylin import exceptions
-from kylin import log
 
 
 FRAME_START = '\x02'
@@ -29,7 +26,7 @@ DEFAULT_SERIAL_PORT = '/dev/ttyS0'
 
 DEFAULT_TIMEOUT = 1
 
-logger = daiquiri.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Kylin(object):
@@ -46,7 +43,7 @@ class Kylin(object):
         level = logging.INFO
         if verbose:
             level = logging.DEBUG
-        log.setup_logging(level)
+        logger.setLevel(level)
 
     def open(self):
         try:
@@ -67,6 +64,8 @@ class Kylin(object):
 
     def close(self):
         """ Close the serial connection. """
+        if self._teleinfo is None:
+            return
         try:
             if self._teleinfo.isOpen():
                 self._teleinfo.close()

@@ -13,8 +13,11 @@
 # limitations under the License.
 
 import kylin
+import time
 
 teleinfo = kylin.Kylin(port="/dev/ttyUSB0", timeout=2, verbose=True)
 teleinfo.open()
-teleinfo.readframe()
+while True:
+    teleinfo.readframe()
+    time.sleep(5)
 teleinfo.close()
