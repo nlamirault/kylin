@@ -16,6 +16,7 @@ Exceptions raised by Kylin.
 
 """
 
+
 class KylinError(Exception):
     """Base exception for errors raised by Kylin"""
     pass
