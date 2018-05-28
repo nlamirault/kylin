@@ -20,13 +20,6 @@ test:python2.7:
     - *dependencies_py2
     - tox -epy27
 
-test:python3.3:
-  image: python:3.3
-  stage: test
-  script:
-    - *dependencies_py3
-    - tox -epy33
-
 test:python3.4:
   image: python:3.4
   stage: test
