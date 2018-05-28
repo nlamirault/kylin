@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2017-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+Unit tests for Kylin.
+"""
 
 import unittest
 # from unittest import mock
@@ -19,7 +22,7 @@ import kylin
 from kylin import exceptions
 
 
-valid_frame = """ADCO 524563565245 /
+VALID_FRAME = """ADCO 524563565245 /
 OPTARIF HC.. <
 ISOUSC 20 8
 HCHC 001065963 _
@@ -39,6 +42,7 @@ ISOUSC 20 8
 
 
 class KylinTestCase(unittest.TestCase):
+    """Main object for unit tests."""
 
     def test_invalid_serial_port(self):
         with self.assertRaises(exceptions.KylinNotFoundError):
