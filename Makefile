@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2017-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ APP = kylin
 SHELL = /bin/bash
 
 VERSION=$(shell \
-        grep release kylin/version.py \
+        grep RELEASE kylin/version.py \
         |awk -F'=' '{ print $$2 }' \
         |sed -e "s/[' ]//g")
 
