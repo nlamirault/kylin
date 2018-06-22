@@ -17,8 +17,6 @@
 from setuptools import setup
 import os
 
-from kylin import version
-
 
 def read(fname):
     with open(os.path.join(os.path.dirname(__file__), fname)) as fn:
@@ -35,7 +33,7 @@ def read(fname):
 
 setup(
     name='kylin',
-    version=version.RELEASE,
+    version="0.6.0",
     description='Library to read Teleinfo frames',
     long_description=read('README.rst'),
     url='https://github.com/nlamirault/kylin',
@@ -43,7 +41,7 @@ setup(
     author_email='nicolas.lamirault@gmail.com',
     packages=['kylin'],
     install_requires=[
-        "pyserial==3.4"
+        "pyserial>=3.4"
     ],
     license='License :: OSI Approved :: Apache Software License',
     classifiers=[
