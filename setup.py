@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2017-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 from setuptools import setup
 import os
-
-from kylin import version
 
 
 def read(fname):
@@ -35,7 +33,7 @@ def read(fname):
 
 setup(
     name='kylin',
-    version=version.release,
+    version="0.6.0",
     description='Library to read Teleinfo frames',
     long_description=read('README.rst'),
     url='https://github.com/nlamirault/kylin',
@@ -43,7 +41,7 @@ setup(
     author_email='nicolas.lamirault@gmail.com',
     packages=['kylin'],
     install_requires=[
-        "pyserial==3.4"
+        "pyserial>=3.4"
     ],
     license='License :: OSI Approved :: Apache Software License',
     classifiers=[

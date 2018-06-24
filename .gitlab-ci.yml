@@ -20,13 +20,6 @@ test:python2.7:
     - *dependencies_py2
     - tox -epy27
 
-test:python3.3:
-  image: python:3.3
-  stage: test
-  script:
-    - *dependencies_py3
-    - tox -epy33
-
 test:python3.4:
   image: python:3.4
   stage: test
@@ -73,7 +66,7 @@ deploy:pypi-test:
     - pip install virtualenv
     - virtualenv venv
     - make init pkg-install pkg-dist
-    - source venv/bin/activate && twine upload --config-file .pypirc -r test -u $PYPI_USER -p $PYPI_PASSWORD dist/*
+    - source venv/bin/activate && twine upload --skip-existing --config-file .pypirc -r test -u $PYPI_USER -p $PYPI_PASSWORD dist/*
 
 deploy:pypi:
   stage: deploy

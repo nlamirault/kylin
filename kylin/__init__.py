@@ -1,4 +1,4 @@
-# Copyright (C) 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2017-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,10 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+Kylin library.
+
+Read Teleinfo data.
+"""
 
 import logging
-import serial
-from serial.tools import list_ports
+import serial  # pylint: disable=import-error
+from serial.tools import list_ports  # pylint: disable=import-error
 
 from kylin import exceptions
 
@@ -26,7 +31,7 @@ DEFAULT_SERIAL_PORT = '/dev/ttyS0'
 
 DEFAULT_TIMEOUT = 1
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class Kylin(object):
@@ -43,11 +48,12 @@ class Kylin(object):
         level = logging.INFO
         if verbose:
             level = logging.DEBUG
-        logger.setLevel(level)
+        LOGGER.setLevel(level)
 
     def open(self):
+        """Open the serial port."""
         try:
-            logger.info("Open serial port: %s with timeout %d",
+            LOGGER.info("Open serial port: %s with timeout %d",
                         self._port, self._timeout)
             self._teleinfo = serial.Serial(
                 port=self._port,
@@ -63,7 +69,7 @@ class Kylin(object):
                 "Unable to open or read serial connection", err)
 
     def close(self):
-        """ Close the serial connection. """
+        """Close the serial connection. """
         if self._teleinfo is None:
             return
         try:
@@ -82,18 +88,18 @@ class Kylin(object):
         """Read a frame from serial port. """
         is_over = False
         line = self._readline()
-        logger.info("Line: %s", line)
+        LOGGER.info("Line: %s", line)
         frame = []
         while not is_over:
 
             # We're waiting for a new frame
             while FRAME_START not in line:
                 line = self._readline()
-                logger.debug("Waiting ....")
+                LOGGER.debug("Waiting ....")
 
-            logger.info(u"New frame")
+            LOGGER.info(u"New frame")
             line = self._readline()
-            logger.info("Line: %s" % line)
+            LOGGER.info("Line: %s", line)
             while FRAME_END not in line:
                 # Don't use strip() here because the checksum can be ' '
                 if len(line.split()) == 2:
@@ -112,13 +118,13 @@ class Kylin(object):
                     })
                     is_over = True
                 else:
-                    logger.warning("Frame corrupted. Waiting for a new one.")
+                    LOGGER.warning("Frame corrupted. Waiting for a new one.")
                     break
 
                 line = self._readline()
-                logger.info("Line: %s", line)
+                LOGGER.info("Line: %s", line)
 
-        logger.info("Frame: %s" % frame)
+        LOGGER.info("Frame: %s", frame)
         return frame
 
 
@@ -127,7 +133,7 @@ def serial_is_available(name):
 
     ports = list_ports.comports()
     for port in ports:
-        logger.info("Port: %s" % port)
+        LOGGER.info("Port: %s", port)
         if port.device == name:
             return True
     return False
@@ -139,8 +145,7 @@ def frame_is_valid(frame, checksum):
         @param frame : the full frame
         @param checksum : the frame checksum
     """
-    logger.debug("Check checksum : f = {0}, chk = {1}".format(
-        frame, checksum))
+    LOGGER.debug("Check checksum : f = %s, chk = %s", frame, checksum)
     datas = ' '.join(frame.split()[0:2])
     my_sum = 0
     for cks in datas:
@@ -149,6 +154,6 @@ def frame_is_valid(frame, checksum):
     if chr(computed_checksum) == checksum:
         return True
 
-    logger.warning(u"Invalid checksum for '{0}' : {1}. Waiting {2}".format(
-        frame, computed_checksum, checksum))
+    LOGGER.warning(u"Invalid checksum for %s : %s. Waiting %s",
+                   frame, computed_checksum, checksum)
     return False
