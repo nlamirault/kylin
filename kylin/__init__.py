@@ -34,7 +34,7 @@ DEFAULT_TIMEOUT = 1
 LOGGER = logging.getLogger(__name__)
 
 
-class Kylin(object):
+class Kylin():
     """Represents a Teleinfo board. """
 
     def __init__(self, port=DEFAULT_SERIAL_PORT, timeout=DEFAULT_TIMEOUT,
