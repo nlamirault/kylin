@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2017-2021 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@ APP = kylin
 
 SHELL = /bin/bash
 
-VERSION=$(shell \
-        grep RELEASE kylin/version.py \
-        |awk -F'=' '{ print $$2 }' \
-        |sed -e "s/[' ]//g")
+# VERSION=$(shell \
+#         grep RELEASE kylin/version.py \
+#         |awk -F'=' '{ print $$2 }' \
+#         |sed -e "s/[' ]//g")
 
 NO_COLOR=\033[0m
 OK_COLOR=\033[32;01m
@@ -37,7 +37,7 @@ help:
 .PHONY: init
 init: ## Initialize environment
 	@echo -e "$(OK_COLOR)[$(APP)] Initialize environment$(NO_COLOR)"
-	test -d venv || virtualenv --python=/usr/bin/python3 venv
+	test -d venv || python3 -m venv venv
 	. venv/bin/activate && \
 		pip3 install -r requirements.txt && \
 		pip3 install -r requirements-dev.txt
@@ -75,16 +75,16 @@ pkg-dist: ## Create the distribution
 		python setup.py sdist && \
 		rm -f AUTHORS ChangeLog
 
-.PHONY: pkg-publish-test
-pkg-publish-test: ## Publish to Pypi Test
-	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi TEST$(NO_COLOR)"
-	. venv/bin/activate && \
-		twine upload -r test dist/${APP}-${VERSION}.tar.gz && \
-		rm -f AUTHORS ChangeLog
+# .PHONY: pkg-publish-test
+# pkg-publish-test: ## Publish to Pypi Test
+# 	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi TEST$(NO_COLOR)"
+# 	. venv/bin/activate && \
+# 		twine upload -r test dist/${APP}-${VERSION}.tar.gz && \
+# 		rm -f AUTHORS ChangeLog
 
-PHONY: pkg-publish
-pkg-publish: ## Publish to Pypi
-	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi(NO_COLOR)"
-	. venv/bin/activate && \
-		twine upload dist/${APP}-${VERSION}.tar.gz && \
-		rm -f AUTHORS ChangeLog
+# PHONY: pkg-publish
+# pkg-publish: ## Publish to Pypi
+# 	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi(NO_COLOR)"
+# 	. venv/bin/activate && \
+# 		twine upload dist/${APP}-${VERSION}.tar.gz && \
+# 		rm -f AUTHORS ChangeLog
