@@ -21,35 +21,35 @@ test:python2.7:
     - tox -epy27
 
 test:python3.4:
-  image: python:3.4
+  image: python:3.9
   stage: test
   script:
     - *dependencies_py3
     - tox -epy34
 
 test:python3.5:
-  image: python:3.5
+  image: python:3.9
   stage: test
   script:
     - *dependencies_py3
     - tox -epy35
 
 test:python3.6:
-  image: python:3.6
+  image: python:3.9
   stage: test
   script:
     - *dependencies_py3
     - tox -epy36
 
 test:flake8:
-  image: python:3.5
+  image: python:3.9
   stage: test
   script:
     - *dependencies_py3
     - tox -epep8
 
 coverage:python:
-  image: python:3.6
+  image: python:3.9
   stage: coverage
   script:
     - *dependencies_py3
@@ -61,7 +61,7 @@ coverage:python:
 
 deploy:pypi-test:
   stage: deploy
-  image: python:3.6
+  image: python:3.9
   script:
     - pip install virtualenv
     - virtualenv venv
@@ -70,7 +70,7 @@ deploy:pypi-test:
 
 deploy:pypi:
   stage: deploy
-  image: python:3.6
+  image: python:3.9
   script:
     - pip install virtualenv
     - virtualenv venv
