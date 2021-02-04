@@ -18,6 +18,7 @@ Read Teleinfo data.
 """
 
 import logging
+import os
 import serial  # pylint: disable=import-error
 from serial.tools import list_ports  # pylint: disable=import-error
 
@@ -130,6 +131,10 @@ class Kylin():
 
 def serial_is_available(name):
     """ Check if a serial port is available. """
+
+    if os.path.islink(name):
+        # Follow the symlink
+        name = os.path.realpath(name)
 
     ports = list_ports.comports()
     for port in ports:
