@@ -16,4 +16,4 @@ Version of Kylin.
 
 """
 
-RELEASE = "0.6.0"
+RELEASE = "0.7.0"
