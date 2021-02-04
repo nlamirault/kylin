@@ -37,7 +37,7 @@ help:
 .PHONY: init
 init: ## Initialize environment
 	@echo -e "$(OK_COLOR)[$(APP)] Initialize environment$(NO_COLOR)"
-	test -d venv || virtualenv --python=/usr/bin/python3 venv
+	test -d venv || python3 -m venv venv
 	. venv/bin/activate && \
 		pip3 install -r requirements.txt && \
 		pip3 install -r requirements-dev.txt
