@@ -45,8 +45,3 @@ jobs:
     - name: Code coverage
       run: |
         pytest --cov=kylin
-
-    - name: Test packaging
-      run: |
-        python setup.py test
-        python setup.py sdist
