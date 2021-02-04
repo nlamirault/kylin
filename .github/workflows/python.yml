@@ -39,11 +39,11 @@ jobs:
  
     - name: Test with pytest
       run: |
-        py.test -ignore=venv
+        pytest -ignore=venv
 
     - name: Code coverage
       run: |
-        py.test -ignore=venv --cov=kylin
+        pytest -ignore=venv --cov=kylin
 
     - name: Test packaging
       run: |
