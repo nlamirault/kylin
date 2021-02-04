@@ -48,4 +48,5 @@ jobs:
 
     - name: Test packaging
       run: |
-        make pkg-test pkg-dist
+        python setup.py test
+        python setup.py sdist
