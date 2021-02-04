@@ -16,10 +16,10 @@ APP = kylin
 
 SHELL = /bin/bash
 
-VERSION=$(shell \
-        grep RELEASE kylin/version.py \
-        |awk -F'=' '{ print $$2 }' \
-        |sed -e "s/[' ]//g")
+# VERSION=$(shell \
+#         grep RELEASE kylin/version.py \
+#         |awk -F'=' '{ print $$2 }' \
+#         |sed -e "s/[' ]//g")
 
 NO_COLOR=\033[0m
 OK_COLOR=\033[32;01m
@@ -75,16 +75,16 @@ pkg-dist: ## Create the distribution
 		python setup.py sdist && \
 		rm -f AUTHORS ChangeLog
 
-.PHONY: pkg-publish-test
-pkg-publish-test: ## Publish to Pypi Test
-	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi TEST$(NO_COLOR)"
-	. venv/bin/activate && \
-		twine upload -r test dist/${APP}-${VERSION}.tar.gz && \
-		rm -f AUTHORS ChangeLog
+# .PHONY: pkg-publish-test
+# pkg-publish-test: ## Publish to Pypi Test
+# 	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi TEST$(NO_COLOR)"
+# 	. venv/bin/activate && \
+# 		twine upload -r test dist/${APP}-${VERSION}.tar.gz && \
+# 		rm -f AUTHORS ChangeLog
 
-PHONY: pkg-publish
-pkg-publish: ## Publish to Pypi
-	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi(NO_COLOR)"
-	. venv/bin/activate && \
-		twine upload dist/${APP}-${VERSION}.tar.gz && \
-		rm -f AUTHORS ChangeLog
+# PHONY: pkg-publish
+# pkg-publish: ## Publish to Pypi
+# 	@echo -e "$(OK_COLOR)[$(APP)] Publish to Pypi(NO_COLOR)"
+# 	. venv/bin/activate && \
+# 		twine upload dist/${APP}-${VERSION}.tar.gz && \
+# 		rm -f AUTHORS ChangeLog
