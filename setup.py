@@ -33,7 +33,7 @@ def read(fname):
 
 setup(
     name='kylin',
-    version="0.6.0",
+    version="1.0.0",
     description='Library to read Teleinfo frames',
     long_description=read('README.rst'),
     url='https://github.com/nlamirault/kylin',

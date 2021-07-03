@@ -15,9 +15,9 @@
 import kylin
 import time
 
-teleinfo = kylin.Kylin(port="/dev/ttyUSB0", timeout=2, verbose=True)
+teleinfo = kylin.TICHistorique(port="/dev/ttyUSB0", timeout=2, verbose=True)
 teleinfo.open()
 while True:
-    teleinfo.readframe()
+    print(teleinfo.readframe())
     time.sleep(5)
 teleinfo.close()

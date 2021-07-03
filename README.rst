@@ -24,11 +24,22 @@ This library is to read Teleinfo_ frames
 Usage
 -------
 
+For meters in the "Teleinfo Standard" mode (linky):
 .. code-block:: python
 
         import kylin
 
-        teleinfo = kylin.Kylin(timeout=2, verbose=True)
+        teleinfo = kylin.TICStandard(timeout=2, verbose=True)
+        teleinfo.open()
+        teleinfo.readframe()
+        teleinfo.close()
+
+For meters in the "Teleinfo Historique" mode (old meters):
+.. code-block:: python
+
+        import kylin
+
+        teleinfo = kylin.TICHistorique(timeout=2, verbose=True)
         teleinfo.open()
         teleinfo.readframe()
         teleinfo.close()

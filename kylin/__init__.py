@@ -15,19 +15,18 @@
 Kylin library.
 
 Read Teleinfo data.
+
+
+For more information read Enedis document "Enedis-NOI-CPT_54E"
 """
 
 import logging
 import os
 import serial  # pylint: disable=import-error
 from serial.tools import list_ports  # pylint: disable=import-error
+import datetime
 
 from kylin import exceptions
-
-
-FRAME_START = '\x02'
-FRAME_END = '\x03'
-
 DEFAULT_SERIAL_PORT = '/dev/ttyS0'
 
 DEFAULT_TIMEOUT = 1
@@ -36,6 +35,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Kylin():
+    FRAME_START = '\x02'
+    FRAME_END = '\x03'
     """Represents a Teleinfo board. """
 
     def __init__(self, port=DEFAULT_SERIAL_PORT, timeout=DEFAULT_TIMEOUT,
@@ -58,7 +59,7 @@ class Kylin():
                         self._port, self._timeout)
             self._teleinfo = serial.Serial(
                 port=self._port,
-                baudrate=1200,
+                baudrate=self.BAUDRATE,
                 bytesize=serial.SEVENBITS,
                 parity=serial.PARITY_EVEN,
                 stopbits=serial.STOPBITS_ONE,
@@ -85,6 +86,7 @@ class Kylin():
         line = data.decode('ascii')
         return line.replace('\r', '').replace('\n', '')
 
+
     def readframe(self):
         """Read a frame from serial port. """
         is_over = False
@@ -92,30 +94,24 @@ class Kylin():
         LOGGER.info("Line: %s", line)
         frame = []
         while not is_over:
-
             # We're waiting for a new frame
-            while FRAME_START not in line:
+            while self.FRAME_START not in line:
                 line = self._readline()
                 LOGGER.debug("Waiting ....")
 
-            LOGGER.info(u"New frame")
-            line = self._readline()
-            LOGGER.info("Line: %s", line)
-            while FRAME_END not in line:
-                # Don't use strip() here because the checksum can be ' '
-                if len(line.split()) == 2:
-                    # The checksum char is ' '
-                    name, value = line.replace('\r', '').replace(
-                        '\n', '').split()
-                    checksum = ' '
-                else:
-                    name, value, checksum = line.split()
+            line = ''
+            while self.FRAME_START not in line:
+                LOGGER.info(u"New frame")
+                line = self._readline()
+                LOGGER.info("Line: %s", line)
+                name, ts, value, checksum = self.split_line(line)
 
-                if frame_is_valid(line, checksum):
+                if self.frame_is_valid(line, checksum):
                     frame.append({
                         "name": name,
                         "value": value,
                         "checksum": checksum,
+                        "timestamp": ts,
                     })
                     is_over = True
                 else:
@@ -127,6 +123,99 @@ class Kylin():
 
         LOGGER.info("Frame: %s", frame)
         return frame
+
+
+class TICStandard(Kylin):
+    BAUDRATE = 9600
+
+    @staticmethod
+    def split_line(line):
+        ''' Splits a standard line. Can either be N\tV\tC or
+        N\tV\tV..\tV\tC'''
+        s = line.split('\t')
+        if len(s) == 3:
+            name = s[0]
+            values = s[1]
+            checksum = s[2]
+            ts = None
+        elif len(s) == 4:
+            name = s[0]
+            values = s[2]
+            checksum = s[3]
+
+            raw_ts = s[1][1:1+2*5]
+            ts = datetime.datetime.strptime(raw_ts, "%y%m%d%H%S")
+        else:
+            raise Exception(f'Unknown format for {line}')
+
+        return (name, ts, values, checksum)
+
+    @staticmethod
+    def frame_is_valid(frame, checksum):
+        """ Check if a frame is valid
+
+            @param frame : the full frame
+            @param checksum : the frame checksum
+        """
+        LOGGER.debug("Check checksum : f = %s, chk = %s", frame, checksum)
+        datas = '\t'.join(frame.split('\t')[0:-1]) + '\t' #  All except CRC
+
+        my_sum = 0
+        for cks in datas:
+            my_sum = my_sum + ord(cks)
+
+        computed_checksum = (my_sum & 0x3F) + 0x20
+        if chr(computed_checksum) == checksum:
+            return True
+
+        LOGGER.warning(u"Invalid checksum for %s : %s. Waiting %s",
+                    frame, computed_checksum, checksum)
+        return False
+
+
+class TICHistorique(Kylin):
+    BAUDRATE = 1200
+
+    @staticmethod
+    def split_line(line):
+        ''' Splits a "historique" line '''
+
+        # Don't use strip() here because the checksum can be ' '
+        splitted_line = line.split()
+        if len(splitted_line) == 2:
+            # The checksum char is ' '
+            name, value = line.replace('\r', '').replace(
+                '\n', '').split()
+            checksum = ' '
+        elif len(splitted_line) == 3:
+            name, value, checksum = line.split()
+        else:
+            raise Exception('Wrong line')
+
+        # There is no timestamp in historique frames
+        ts = None
+        return name, ts, value, checksum
+
+
+    @staticmethod
+    def frame_is_valid(frame, checksum):
+        """ Check if a frame is valid
+
+            @param frame : the full frame
+            @param checksum : the frame checksum
+        """
+        LOGGER.debug("Check checksum : f = %s, chk = %s", frame, checksum)
+        datas = ' '.join(frame.split()[0:2])
+        my_sum = 0
+        for cks in datas:
+            my_sum = my_sum + ord(cks)
+        computed_checksum = (my_sum & int("111111", 2)) + 0x20
+        if chr(computed_checksum) == checksum:
+            return True
+
+        LOGGER.warning(u"Invalid checksum for %s : %s. Waiting %s",
+                    frame, computed_checksum, checksum)
+        return False
 
 
 def serial_is_available(name):
@@ -143,22 +232,3 @@ def serial_is_available(name):
             return True
     return False
 
-
-def frame_is_valid(frame, checksum):
-    """ Check if a frame is valid
-
-        @param frame : the full frame
-        @param checksum : the frame checksum
-    """
-    LOGGER.debug("Check checksum : f = %s, chk = %s", frame, checksum)
-    datas = ' '.join(frame.split()[0:2])
-    my_sum = 0
-    for cks in datas:
-        my_sum = my_sum + ord(cks)
-    computed_checksum = (my_sum & int("111111", 2)) + 0x20
-    if chr(computed_checksum) == checksum:
-        return True
-
-    LOGGER.warning(u"Invalid checksum for %s : %s. Waiting %s",
-                   frame, computed_checksum, checksum)
-    return False
