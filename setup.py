@@ -69,7 +69,7 @@ setup(
         "pytest==6.2.5",
         "pytest-cov==2.5.1",
         "pytest-sugar==0.9.0",
-        "flake8==3.9.2",
+        "flake8==4.0.1",
     ],
     zip_safe=True
 )
