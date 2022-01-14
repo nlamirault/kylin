@@ -67,7 +67,7 @@ setup(
     test_suite='kylin/tests',
     tests_require=[
         "pytest==6.2.5",
-        "pytest-cov==2.12.1",
+        "pytest-cov==3.0.0",
         "pytest-sugar==0.9.0",
         "flake8==4.0.1",
     ],
